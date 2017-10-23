@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="alert alert-info" role="alert">
+  <form class="form-inline row">
+    <div class="form-group col-md-2">
+      <label style="padding-top: 7px">
+        <i class="fa fa-search" aria-hidden="true"></i> select portfolio:
+      </label>
+    </div>
+    <div class="form-group col-md-4">
+      <div class="input-group" style="width:100%">
+        <div class="input-group-addon">
+          <i class="fa fa-university" aria-hidden="true"></i>
+        </div>
+        <select name="inst" class="form-control">
+          <option value="td">TD Asset Management</option>
+          <option value="scotia">Scotia Wealth Management</option>
+          <option value="rbc">RBC Global Asset Management</option>
+          <option value="cibc">CIBC Asset Management</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group col-md-4">
+      <div class="input-group" style="width:100%">
+        <div class="input-group-addon">
+          <i class="fa fa-briefcase" aria-hidden="true"></i>
+        </div>
+        <select name="folios" class="form-control">
+          <option>Loading Portfolios</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group col-md-2">
+      <button type="submit" id="submit" class="btn-primary btn btn-default">
+        <i class="fa fa-check-circle" aria-hidden="true"></i> submit
+      </button>
+    </div>
+  </form>
+</div>
+<div class="jumbotron">
+  <h2><i class="fa fa-tachometer" aria-hidden="true"></i> welcome to the dashboard</h2>
+  <p>select any of the portfolios above to view its detailed analytics.  if you want more background information on any of the analysis, simply click on the header.</p>
+</div>
+{% endblock %}
+{% block end_scripts %}
+<script>
+  // load avail portfolios
+  $('select[name="folios"]').find('option').remove().end()
+  $.getJSON( "getAvailableFolios", function( data ) {
+    $.each(data, function(k,v){
+      $('select[name="folios"]').append('<option value='+k+'>'+v+'</option>');
+    });
+  });
+</script>
+{% endblock %}

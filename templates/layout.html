@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>just another investment fund</title>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://code.highcharts.com/stock/highstock.js"></script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/data.js"></script>
+        <script src="https://code.highcharts.com/maps/modules/map.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+        <!-- Flag sprites service provided by Martijn Lafeber, https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE -->
+        <link rel="stylesheet" type="text/css" href="https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+        <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
+        <script>
+          $.ajaxSetup({
+            'async': false
+          });
+        </script>
+    </head>
+    <body>
+        <div class="container" style="margin-bottom: 350px;">
+            <nav class="navbar navbar-default navbar-static">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+                        <span class="icon-bar"> </span>
+                        <span class="icon-bar"> </span>
+                        <span class="icon-bar"> </span>
+                      </button>
+                      <a class="navbar-brand navbar-logo" href="/">jaif</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="mainNavBar">
+                      <ul class="nav navbar-nav navbar-right">
+                        <li>
+                          <a href="portfolios">portfolios</a>
+                        </li>
+                        <li>
+                            <a href="about">about</a>
+                        </li>
+                        <li>
+                            <a href="http://kpei.me/blog">contact</a>
+                        </li>
+                      </ul>
+                    </div>
+              </div>
+            </nav>
+
+            {% block body %}{% endblock %}
+
+        </div>
+        <footer class="footer">
+          <div class="container">
+            <p class="footer-text">
+              made with <i class="fa fa-heart" id="love" aria-hidden="true"></i> by <a href="http://kpei.me/" target="_blank">kevin pei</a> - {{ year }}
+            </p>
+            <p class="footer-text"><small>The information provided on this website is meant only for general reading purposes and the views being expressed only constitute opinions and therefore cannot be considered as guidelines, recommendations or as a professional guide for the readers. Before making any investments, the readers are advised to seek independent professional advice, verify the contents in order to arrive at an informed investment decision. Each mutual fund has a simplified prospectus, which contains important information about the fund, including its investment objective, purchase options and applicable charges. Please read the prospectus of the funds in which investments may be made before investing.  Mutual funds are not guaranteed, their values change frequently and past performance may not be repeated. Mutual fund securities are not insured by the Canada Deposit Insurance Corporation or by any other government deposit insurer.</small></p>
+          </div>
+        </footer>
+        
+      {% block end_scripts %}
+      {% endblock %}
+    </body>
+</html>

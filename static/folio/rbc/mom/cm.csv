@@ -1,0 +1,48 @@
+country,code,mkt,rc,mkt_pct
+Australia,AU,219.41608,0.00284,0.05942
+Austria,AT,5.82742,0.00006,0.00158
+Belgium,BE,32.18955,0.00033,0.00872
+Bermuda,BM,,,
+Brazil,BR,,,
+Canada,CA,870.15402,0.05923,0.23563
+Cayman Islands,KY,,,
+Chile,CL,,,
+Colombia,CO,0.00000,0.00000,0.00000
+Czech Republic,CZ,,,
+Denmark,DK,45.50937,0.00046,0.01232
+Egypt,EG,,,
+Finland,FI,26.91712,0.00027,0.00729
+France,FR,268.06126,0.00271,0.07259
+Germany,DE,261.95635,0.00265,0.07093
+Greece,GR,,,
+Hong Kong,HK,85.19131,0.00086,0.02307
+Hungary,HU,,,
+India,IN,,,
+Indonesia,ID,,,
+Ireland,IE,4.71743,0.00005,0.00128
+Israel,IL,16.09478,0.00016,0.00436
+Italy,IT,51.33678,0.00052,0.01390
+Japan,JP,648.78596,0.00656,0.17568
+Luxembourg,LU,1.94247,0.00002,0.00053
+Malaysia,MY,,,
+Mexico,MX,0.78818,0.00005,0.00021
+Netherlands,NL,96.56865,0.00098,0.02615
+New Zealand,NZ,4.71743,0.00005,0.00128
+Norway,NO,17.48226,0.00018,0.00473
+Papua New Guinea,PG,1.66498,0.00002,0.00045
+Peru,PE,,,
+Philippines,PH,,,
+Poland,PL,,,
+Portugal,PT,4.16244,0.00004,0.00113
+Qatar,QA,,,
+Russia,RU,,,
+Singapore,SG,40.79193,0.00041,0.01105
+South Africa,ZA,0.83249,0.00001,0.00023
+Spain,ES,92.68371,0.00094,0.02510
+Sweden,SE,80.19638,0.00081,0.02172
+Switzerland,CH,242.80912,0.00245,0.06575
+Thailand,TH,,,
+Turkey,TR,,,
+United Arab Emirates,AE,,,
+United Kingdom,GB,484.50825,0.00490,0.13120
+United States,US,87.60196,0.00387,0.02372

@@ -1,0 +1,221 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="container-fluid">
+  <blockquote class="push-sm blockquote">
+      <p>
+        I think that the first thing is you should have a strategic asset allocation mix that assumes that you don't know what the future is going to hold.
+      </p>
+      <footer>
+        Ray Dalio, Manager of <cite title="Source Title">Bridgewater Associates</cite>
+      </footer>
+    </blockquote>
+
+  <p class="detail-text push-sm text-justify">
+    I started jaif as an exercise in three co-related areas: python web development, portfolio strategies and performance evaluation.  I manage for myself a small portfolio of index and mutual funds from my local bank and thought it’d be a great exercise to share my investment ideas as well as provide the analytics to back it up.  I also kept it open-ended so that anyone looking to copy the funds’ performances can replicate the portfolio from their own banking institution.
+    <br><br>
+    A lot of the analytics on the dashboards require up to a certain degree of understanding in investments/finance.  Retail investors that are familiar with the terms probably already have a well-informed point of view on investing.  For those investors that are just starting, some of the content will seem esoteric.  That’s why I want this website to <strong>serve two primary purposes</strong>, if you are an informed investor, I hope the content will persuade you to look at the financial markets from a different perspective.  If you are just starting out, I hope you can give my website a chance and learn through the various educational blurbs that I have left as you go along.
+  </p>
+
+  <h2 class="push-sm">Investment Principles</h2>
+  <p class="detail-text text-justify">
+    Every good investment fund need a set of basic principles that they adhere to.  Here are some beliefs/assumptions that I consider when devising portfolios for jaif:
+  </p>
+    <ol>
+      <li>It is extremely difficult to predict asset prices, therefore it’s unreasonable to expect a certain return from any specific asset.</li>
+      <li>Diversification is the only free lunch we can get, therefore we should expand to as many diversifying asset classes as possible.</li>
+      <li>Interdependence between asset prices as well as volatility can be estimated on the long-term with relative success.</li>
+      <li>We can tilt our portfolio toward well known market inefficiencies for additional outperformance against the benchmark</li>
+    </ol>
+  <p class="detail-text text-justify">
+    That’s not to say these beliefs are without flaws, they’re just my perspectives on the market which I have developed after observing (and reading) how difficult it can be to speculate prices in the short term and trade successfully off of that.
+  </p>
+
+  <h2 class="push-sm">Asset Shopping</h2>
+  <p class="detail-text text-justify">
+    We have to define the basket of investable assets that we are working with.  Since my intention for jaif is to have any investor be able to have their money invested within twenty minutes, the primary focus will be on the mutual funds offerings from large Canadian banks.  I also have plans of starting ETF-based portfolios for anyone with a brokerage account.
+    <br/><br/><br/>
+  </p>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <div class="col-md-3">
+                <a data-toggle="tooltip" data-placement="left" title="TD Canada Trust">
+                    <img width="79" height="70" src="{{ url_for('static', filename='td-logo.png') }}"/>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a data-toggle="tooltip" data-placement="left" title="Royal Bank of Canada">
+                    <img width="58" height="74" src="{{ url_for('static', filename='rbc-logo.png') }}"/>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a data-toggle="tooltip" data-placement="left" title="Scotiabank">
+                    <img width="70" height="70" src="{{ url_for('static', filename='scotia-logo.png') }}"/>
+                </a>
+            </div>
+            <div class="col-md-3">
+                <a data-toggle="tooltip" data-placement="left" title="CIBC">
+                    <img width="77" height="70" src="{{ url_for('static', filename='cibc-logo.png') }}"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h3>Currently Supported Financial Institutions</h3>
+        </div>
+    </div>
+  <p class="detail-text text-justify">
+    <br/>From the banks’ mutual fund offerings, how do we know which funds ultimately include in our portfolio? The three primary factors I look for are:
+  </p>
+
+  <ol>
+    <li>The fund’s management expense ratio, or how much would it cost me to buy this fund?</li>
+    <li>The historical correlation between this fund and other funds.</li>
+    <li>The economic reason behind (2).</li>
+  </ol>
+
+  <p class="detail-text text-justify">
+    This naturally leads to me favoring index funds (designed to track a specific market index and have lower fees) over an actively-managed fund.  However, I have included other managed mutual funds that is in line with (2).  For example, in the TD portfolios, I have included funds such as global bond, high yield and precious metals due to their diversifying benefits.
+  </p>
+
+  <h2 class="push-sm">Fund Allocation</h2>
+  <p class="detail-text text-justify">
+    How the funds are allocated weights depend on the strategy at hand, the overall framework is in a three-step fashion of model selection, parameter estimation and optimization.  I will mainly discuss step one.  There are two core models that are being applied: <strong>risk targeting</strong> and <strong>sort-based</strong>. <br/><br/>
+  </p>
+
+  <div class="row">
+    <div class="col-md-7">
+      <p class="detail-text text-justify">
+        <strong>Risk Targeting</strong>: Structure the individual asset weights so that they are as equally weighted as possible while limiting the overall portfolio risk.  Risk in this situation is defined as regular standard deviation (or how much the portfolio fluctuates on average each year).  For all portfolios, I keep this level at 8% since it’s pretty close to long-term market returns.  It’s also important to note that these are estimated volatility, realized volatility after-the-fact are usually longer
+      </p>
+    </div>
+    <div class="col-md-5">
+        <div id="risk" style="height: 250px"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-7">
+      <p class="detail-text text-justify">
+        <strong>Sort-based</strong>: Referring back on (4) in Investment principles, factor tilts such as momentum and tactical make use of a sort-based model to structure their weights.  The model utilizes a traditional return-risk optimization but with emphasis on ranking the returns (rather than estimating exact numbers).  The method I use is from <a href="http://www.courant.nyu.edu/~almgren/papers/sort.pdf">Almgren and Chriss (2005)</a>, and generates an expected return (in real numbers) from relative ranking.  For example:
+      </p>
+      <ul>
+        <li>In momentum factor, I calculate the previous 180 returns for each individual fund and sort them by most-least returns and feed it into the return generator.</li>
+        <li>In tactical factor, I calculate the difference between current price with its 200 day moving average and follow the same procedure as momentum.</li>
+      </ul>
+      <p class="detail-text text-justify">
+        Lastly, I impose a risk budget constraint on the sort model so that it’s unlikely one specific asset will receive all the weights.  On a practical basis, weights still tend to be a lot more concentrated than the previous model.
+
+      </p>
+    </div>
+    <div class="col-md-5">
+        <div id="sort" style="height: 320px"></div>
+    </div>
+  </div>
+
+  <h2 class="push-sm">Summary</h2>
+  <p class="detail-text text-justify">
+    Anybody looking to invest can generate above-average returns right at your local financial institution.  Stop going to mutual fund representatives and decline any invitations for a chat.  They are simply there to sell you the most expensive products.  As your net worth grows,  your need for sophistication and understanding in your investments grows as well.  Explore ETFs, hedge funds, alternative assets, bitcoins, venture capital, anything.  It’s all about building your way up to financial freedom while still being able to sleep at night.  I hope my website is able to provide you with my basic building blocks of personal investing and I also hope to improve upon this philosophy as I learn more about the financial markets.
+  </p>
+
+
+</div>
+{% endblock %}
+{% block end_scripts %}
+<script>
+  $('#sort').highcharts({
+    chart: {
+        type: 'bar',
+        backgroundColor:null
+    },
+    title : {text : 'Generated Asset Returns'},
+    subtitle: {text: 'from input rankings' },
+    legend: {
+        enabled: false
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:,.2f}</b><br/>',
+        shared: true
+    },
+    yAxis: {
+        title: { text: '' },
+        gridLineDashStyle: 'dot',
+        gridLineColor: '#464646',
+        lineColor: '#464646',
+        tickWidth: 0,
+        labels: { format: '{value}' }
+    },
+    xAxis: {
+        title: { text: '' },
+        lineColor: '#464646',
+        tickWidth: 0,
+        categories: ["US Stocks", "Global Bonds", "Gold", "Emerging Stocks", "High Yields", "Canadian Stocks"]
+    },
+    series: [{
+        name: 'Returns',
+        data: [ 1.27149415,  0.64006284,  0.20098464, -0.20098464, -0.64006284,
+       -1.27149415]
+    }]
+  });
+
+  $('#risk').highcharts({
+    chart: {
+        type: 'pie',
+        backgroundColor:null,
+    },
+    title : {text : 'Fund Proportions'},
+    subtitle: {text: 'Low Risk Target (Left) vs High Risk Target (Right)' },
+    legend: {
+        enabled: true
+    },
+    tooltip: {
+        pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.percentage:,.1f}%</b><br/>',
+        shared: true
+    },
+    yAxis: {
+        title: { text: '' },
+        gridLineDashStyle: 'dot',
+        gridLineColor: '#464646',
+        lineColor: '#464646',
+        tickWidth: 0,
+        labels: { format: '{value}%' }
+    },
+    xAxis: {
+        title: { text: '' },
+        lineColor: '#464646',
+        tickWidth: 0,
+        categories: ["Stocks", "Bonds", "Metals", "Start-ups"]
+    },
+    series: [{
+        name: 'Safe target',
+        dataLabels: { enabled: false },
+        center: [100, null],
+        showInLegend: true,
+        data: [
+          ["Stocks", 3],
+          ["Bonds", 6],
+          ["Metals", 0.75],
+          ["Start-ups", 0.25],
+        ]
+    },
+    {
+        name: 'Risky target',
+        center: [300, null],
+        dataLabels: { enabled: false },
+        data: [
+          ["Stocks", 2],
+          ["Bonds", 1],
+          ["Metals", 3],
+          ["Start-ups", 4],
+        ]
+    }]
+  });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock %}
+
+
+

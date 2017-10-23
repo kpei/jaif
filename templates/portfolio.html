@@ -1,0 +1,828 @@
+{% extends "layout.html" %}
+{% block body %}            
+    <div class="alert alert-info" role="alert">
+      <form class="form-inline row">
+        <div class="form-group col-md-2">
+          <label style="padding-top: 7px">
+            <i class="fa fa-search" aria-hidden="true"></i> select portfolio:
+          </label>
+        </div>
+        <div class="form-group col-md-4">
+          <div class="input-group" style="width:100%">
+            <div class="input-group-addon">
+              <i class="fa fa-university" aria-hidden="true"></i>
+            </div>
+            <select name="inst" class="form-control">
+              <option value="td">TD Asset Management</option>
+              <option value="scotia">Scotia Wealth Management</option>
+              <option value="rbc">RBC Global Asset Management</option>
+              <option value="cibc">CIBC Asset Management</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-md-4">
+          <div class="input-group" style="width:100%">
+            <div class="input-group-addon">
+              <i class="fa fa-briefcase" aria-hidden="true"></i>
+            </div>
+            <select name="folios" class="form-control">
+              <option>Loading Portfolios</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group col-md-2">
+          <button type="submit" id="submit" class="btn-primary btn btn-default">
+            <i class="fa fa-check-circle" aria-hidden="true"></i> submit
+          </button>
+        </div>
+      </form>
+    </div>
+<div id="loading" class="push text-center">
+  <i class="fa fa-spinner fa-spin" style="font-size:100px"></i><br/>
+  <p id="loadmsg">loading...this may take a minute</p>
+</div>
+  <div class="container-fluid" style="display:none;" id="dashboard">
+    <div class="page-header">
+      <h1>
+          <i class="fa fa-briefcase" aria-hidden="true"></i>
+          <span id="portname">Portfolio A</span> <br/>
+          <small>Short description of Portfolio A</small>
+      </h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-line-chart" aria-hidden="true"></i> performance report
+        </h3>
+        <p class="text-right">fund performance versus benchmark with $1000 initial investment</p>
+        <div class="well">
+          <div class="row">
+            <div class="col-md-2 text-center">
+              <div class="stat-box">
+                total return <br/>
+                <b id="sbret">XX%</b>
+              </div>
+              <div class="stat-box">
+                annual growth <br/>
+                <b id="sbcagr">XX%</b>
+              </div>
+              <div class="stat-box">
+                volatility <br/>
+                <b id="sbvol">XX%</b>
+              </div>
+              <div class="stat-box">
+                excess sharpe <br/>
+                <b id="sbsharpe">XX%</b>
+              </div>
+              <div class="stat-box">
+                beta <br/>
+                <b id="sbbeta">XX%</b>
+              </div>
+              <div class="stat-box last-stat-box">
+                alpha <br/>
+                <b id="sbalpha">XX%</b>
+              </div>
+            </div>
+            <div class="col-md-10">
+              <div id="performance" style="height:380px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="sect-header">
+          <i class="fa fa-star" aria-hidden="true"></i> holdings
+        </h3>
+        <p>current allocation, total return and distribution breakdown</p>
+        <div class="well">
+          <table class="table table-responsive" id="holdings">
+            <tr>
+              <th>name</th>
+              <th>weight</th>
+              <th>contribution</th>
+              <th>yield</th>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-pie-chart" aria-hidden="true"></i> allocation schema
+        </h3>
+        <p class="text-right">quarterly rebalancing report</p>
+        <div class="well">
+          <div id="allocation" style="height:300px"></div>
+        </div>
+      </div>
+    </div>
+        <div class="row">
+      <div class="col-md-12">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-flask" aria-hidden="true"></i> detailed metrics
+        </h3>
+        <p class="text-right">with rolling 6-month chart</p>
+        <div class="well">
+            <div class="row">
+              <div class="col-md-3">
+                <table id="dm" class="table table-condensed table-responsive">
+                  <tr>
+                    <th>metric</th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="sharpe">excess sharpe</a></td>
+                    <td id="dmsharpe" >xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="vol">volatility</a></td>
+                    <td id="dmvol">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="alpha">alpha</a></td>
+                    <td id="dmalpha" name="alpha">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="beta">beta</a></td>
+                    <td id="dmbeta">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="ir">information</a></td>
+                    <td id="dmir">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="te">tracking error</a></td>
+                    <td id="dmte">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="var">var</a></td>
+                    <td id="dmvar">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="tr">tail ratio</a></td>
+                    <td id="dmtr">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="kurt">kurtosis</a></td>
+                    <td id="dmkurt">xx</td>
+                  </tr>
+                  <tr>
+                    <td><a href="#" id="skew">skew</a></td>
+                    <td id="dmskew">xx</td>
+                  </tr>
+                  <tr>
+                    <td>current mer</td>
+                    <td id="dmmer"></td>
+                  </tr>
+                  <tr>
+                    <td>benchmark mer</td>
+                    <td id="dmbmer"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-md-9 text-center">
+                <div id="rolling" class="height:380px"></div>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h3 class="sect-header">
+          <i class="fa fa-globe" aria-hidden="true"></i> geographical risk
+        </h3>
+        <p>annualized risk contributions for the past quarter</p>
+        <div class="well">
+          <div id="country" style="height:415px"></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-tachometer" aria-hidden="true"></i> factor-based attribution
+        </h3>
+        <p class="text-right">a global factor decomposition of the past 6 month returns</p>
+        <div class="well">
+          <div id="factor" style="height:415px"></div>
+          <p class="text-muted text-center">
+            <b>fund alpha:</b> <span class="text-primary" id="fundalpha"></span> |
+            <b>benchmark alpha:</b> <span class="text-primary" id="benchmarkalpha"></span>
+          <p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-plus" aria-hidden="true"></i> relative performance
+        </h3>
+        <p class="text-right">
+          relative returns within the canadian mutual fund universe
+        </p>
+        <div class="well">
+          <div class="row">
+            <div class="col-md-6 text-center">
+              <form class="form-inline row">
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-clock-o" aria-hidden="true"></i>
+                  time period
+                  </div>
+                  <select id="prop_t" class="form-control">
+                    <option value="m" selected>past month</option>
+                    <option value="3m">past quarter</option>
+                    <option value="6m">past 6 months</option>
+                    <option value="ytd">year to date</option>
+                    <option value="y">past year</option>
+                    <option value="yy">past 2 years</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-tachometer" aria-hidden="true"></i>
+                  performance
+                  </div>
+                  <select id="prop_p" class="form-control">
+                    <option value="poor" selected>poor</option>
+                    <option value="bad">bad</option>
+                    <option value="good">good</option>
+                    <option value="excellent">excellent</option>
+                  </select>
+                </div>
+              </form>
+              <div class="row push-smr">
+                <div class="col-md-12" id="prop" style="height:350px"></div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div id="releval" style="height:465px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-calendar" aria-hidden="true"></i> event analysis
+        </h3>
+        <p class="text-right">
+          a closer look at crises and important events that impacted the financial markets
+        </p>
+        <div class="well">
+          <div class="row">
+            <div class="col-md-4">
+              <div id="crisissubprime" style="height:250px"></div>
+            </div>
+            <div class="col-md-4">
+              <div id="crisiseuro" style="height:250px"></div>
+            </div>
+            <div class="col-md-4">
+              <div id="crisisaug" style="height:250px"></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div id="crisis2015" style="height:250px"></div>
+            </div>
+            <div class="col-md-4">
+              <div id="crisisbrexit" style="height:250px"></div>
+            </div>
+            <div class="col-md-4">
+              <div id="crisisbrexit" style="height:250px"></div>
+            </div>
+          </div><br/><br/>
+          <div class="row">
+            <div class="col-md-4">
+              <p class="text-center text-info">return breakdown</p>
+              <table id="crisisbreakdown" class="table table-responsive">
+                <tr>
+                  <th>crisis</th>
+                  <th>benchmark</th>
+                  <th>portfolio</th>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-8">
+              <div id="quantile" style="height:415px"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row hidden">
+      <div class="col-md-12">
+        <h3 class="sect-header text-right">
+          <i class="fa fa-plus" aria-hidden="true"></i> skill-based attribution
+        </h3>
+        <p class="text-right">
+          asset allocation vs. security selection decomposition against a global benchmark
+        </p>
+        <div class="well">
+          <div class="row">
+            <div class="col-md-2 text-center">
+              <div class="stat-box">
+                allocation <br/>
+                <b>xx.x</b>
+              </div>
+              <div class="stat-box">
+                selection <br/>
+                <b>xx.x</b>
+              </div>
+              <div class="stat-box">
+                timing <br/>
+                <b>xx.x</b>
+              </div>
+            </div>
+            <div class="col-md-10 text-center">
+              chart
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block end_scripts %}
+<script>
+  $(document).ready(function(){
+    setTimeout( function() {
+    var Chart = {
+                chart: {
+                    type: 'line',
+                    backgroundColor:null
+                },
+                rangeSelector : {
+                  selected : 5
+                },
+                title : {text : ''},
+                plotOptions: {
+                    line: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                data: {
+                    csv: null,
+                },
+                legend: {
+                    enabled: false
+                },
+                tooltip: {
+                    pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>${point.y:,.2f}</b><br/>',
+                    shared: true
+                },
+                yAxis: {
+                    title: { text: '' },
+                    gridLineDashStyle: 'dot',
+                    gridLineColor: '#464646',
+                    lineColor: '#464646',
+                    tickWidth: 0,
+                    labels: { format: '${value}' }
+                },
+                xAxis: {
+                    title: { text: '' },
+                    lineColor: '#464646',
+                    tickWidth: 0
+                }
+            }
+
+    // load avail portfolios
+    $('select[name="folios"]').find('option').remove().end()
+    $.getJSON( "getAvailableFolios", function( data ) {
+      $.each(data, function(k,v){
+        $('select[name="folios"]').append('<option value='+k+'>'+v+'</option>');
+      });
+    });
+
+    // Load portfolio information
+    var folio = '{{ folio }}';
+    var inst = '{{ inst }}';
+    //var folioBenchmark;
+
+    $.getJSON('getFolioDetails/'+inst+'/'+folio, function(data){
+      if(Object.keys(data).length === 0 && data.constructor === Object){
+        alert('the portfolio could not be loaded.  please try again later.');
+      } else {
+        // now change header and desc
+        $('.page-header h1 span').text(data['inst']['name']+' '+data['name']);
+        $('.page-header h1 small').text(data['desc']);
+        $('#portname').css('color', data['inst']['color']);
+        //folioBenchmark = data['benchmark']
+      }
+    });
+
+    $('#loadmsg').text('loading portfolio price series')
+    // Load portfolio price series
+    $.get(inst+'/'+folio+'/graphPerformanceSeries/0', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        $('#performance').highcharts('StockChart', c);
+    });
+
+    // load stats box data
+    $.getJSON(inst+'/'+folio+"/getFolioStat", function( data ) {
+          $('#sbret').text( (Math.round(data['return'] * 10000) / 100)+'%' );
+          $('#sbalpha,#dmalpha').text( (Math.round(data['alpha'] * 10000) / 100)+'%' );
+          $('#sbbeta,#dmbeta').text( Math.round(data['beta'] * 100) / 100 );
+          $('#sbvol,#dmvol').text( (Math.round(data['vol'] * 10000) / 100)+'%' );
+          $('#sbcagr').text( (Math.round(data['cagr'] * 10000) / 100)+'%' );
+          $('#sbsharpe,#dmsharpe').text( Math.round(data['sharpe'] * 100) / 100 );
+          $('#dmte').text( (Math.round(data['te'] * 10000) / 100)+'%' );
+          $('#dmvar').text( (Math.round(data['var'] * 10000) / 100)+'%' );
+          $('#dmir').text( (Math.round(data['ir'] * 100) / 100) );
+          $('#dmtr').text( (Math.round(data['tr'] * 100) / 100) );
+          $('#dmskew').text( (Math.round(data['skew'] * 100) / 100) );
+          $('#dmkurt').text( (Math.round(data['kurt'] * 100) / 100) );
+          $('#dmmer').text( (Math.round(data['mer'] * 1000) / 1000)+'%' );
+          $('#dmbmer').text( (Math.round(data['bmer'] * 1000) / 1000)+'%' );
+        });
+
+    // load holdings info
+    $.getJSON(inst+'/'+folio+'/getHoldingsInformation', function(data) {
+      $.each(data, function(k,v){
+        var w = Math.round(v['weight']*100)*1.75+'%'
+        var style = "background: -webkit-linear-gradient(left, rgba(11,113,253,0.20) "+w+", #fff08e "+w+"); \
+                     background: -moz-linear-gradient(left, rgba(11,113,253,0.20) "+w+", #fff08e "+w+"); \
+                     background: -o-linear-gradient(left, rgba(11,113,253,0.20) "+w+", #fff08e "+w+"); \
+                     background: -ms-linear-gradient(left, rgba(11,113,253,0.20) "+w+", #fff08e "+w+"); \
+                     background: linear-gradient(left, rgba(11,113,253,0.20) "+w+", #fff08e "+w+");"
+        $('#holdings tr:last').after(' \
+          <tr> \
+            <td style="'+style+'"><a href="#">'+v['label']+'</a></td> \
+            <td class="text-center">'+Math.round(v['weight']*100)+'%</td> \
+            <td class="text-center">'+Math.round(v['contrib']*1000)/10+'%</td> \
+            <td class="text-center">'+Math.round(v['yield']*1000)/10+'%</td> \
+          </tr>');
+      })
+    });
+
+    //load rolling statistics
+    $.get(inst+'/'+folio+'/graphRollingStatistics/sharpe', function(csv) {
+            var c = JSON.parse(JSON.stringify(Chart));
+            c['data']['csv'] = csv;
+            c['title'] = {text : 'rolling excess sharpe'};
+            c['tooltip']['pointFormat'] = '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:,.2f}</b><br/>';
+            c['yAxis']['labels'] = { format: '{value}' };
+            $('#rolling').highcharts(c);
+      });
+
+    // load allocation series
+    $.get(inst+'/'+folio+'/graphAllocationSeries/dol/1', function(csv) {
+            var c = JSON.parse(JSON.stringify(Chart));
+            c['data']['csv'] = csv;
+            c['xAxis']['tickWidth'] = 0;
+            c['xAxis']['lineWidth'] = 0;
+            c['chart']['type'] = 'area';
+            c['plotOptions']['area'] = {
+                        stacking: 'percent',
+                        marker: {
+                            enabled: false
+                        }
+                    };
+            c['tooltip']['pointFormat'] = '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b><br/>';
+            c['yAxis'] = {
+                    title: { text: '' },
+                    gridLineDashStyle: 'dot',
+                    min: 0,
+                    max: 100,
+                    lineWidth: 0,
+                    tickWidth: 0,
+                    labels: { format: '{value}%' }
+                };
+            $('#allocation').highcharts(c);
+        });
+
+    // event analysis
+
+    $.get(inst+'/'+folio+'/graphCrisisPerformance/subprime', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        c['title'] = {text : 'u.s subprime crisis'};
+        c['subtitle'] = {text : 'September 2008 - January 2009'};
+        $('#crisissubprime').highcharts(c);
+    });
+
+    $.get(inst+'/'+folio+'/graphCrisisPerformance/euro', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        c['title'] = {text : 'european debt crisis'};
+        c['subtitle'] = {text : 'January 2010 - November 2010'};
+        $('#crisiseuro').highcharts(c);
+    });
+
+    $.get(inst+'/'+folio+'/graphCrisisPerformance/aug', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        c['title'] = {text : 'august crash and recovery'};
+        c['subtitle'] = {text : 'July, 2011 - Febuary, 2012'};
+        $('#crisisaug').highcharts(c);
+    });
+
+    $.get(inst+'/'+folio+'/graphCrisisPerformance/late-2015', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        c['title'] = {text : 'late 2015 sell-off and black monday'};
+        c['subtitle'] = {text : 'August 2015 - November 2015'};
+        $('#crisis2015').highcharts(c);
+    });
+
+    $.get(inst+'/'+folio+'/graphCrisisPerformance/brexit', function(csv) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data']['csv'] = csv;
+        c['title'] = {text : 'brexit'};
+        c['subtitle'] = {text : 'June 2016 - July 2015'};
+        $('#crisisbrexit').highcharts(c);
+    });
+
+
+    $.getJSON(inst+'/'+folio+'/getCrisisBreakdown', function(data) {
+      $.each(data, function(k,v){
+        if(['crisis alpha', 'non-crisis alpha'].indexOf(v['name']) > -1){
+          v['name'] = '<b>'+v['name']+'</b>';
+          v['Benchmark'] = '';
+          v['Fund'] = '<b>'+Math.round(v['Fund']*1000)/10+'%</b>';
+        } else if(['crisis beta', 'non-crisis beta'].indexOf(v['name']) > -1){
+          v['name'] = '<b>'+v['name']+'</b>';
+          v['Benchmark'] = '';
+          v['Fund'] = '<b>'+Math.round(v['Fund']*100)/100+'</b>';
+        } else {
+          v['Benchmark'] = Math.round(v['Benchmark']*1000)/10+'%';
+          v['Fund'] = Math.round(v['Fund']*1000)/10+'%';
+        }
+        $('#crisisbreakdown tr:last').after(' \
+          <tr> \
+            <td>'+v['name']+'</td> \
+            <td class="text-center">'+v['Benchmark']+'</td> \
+            <td class="text-center">'+v['Fund']+'</td> \
+          </tr>');
+      })
+    });
+
+    // get conditional quantile returns
+    $.get(inst+'/'+folio+'/graphConditionalQuantileReturns', function(csv) {
+            var c = JSON.parse(JSON.stringify(Chart));
+            c['data']['csv'] = csv;
+            c['xAxis']['tickWidth'] = 0;
+            c['xAxis']['lineWidth'] = 0;
+            c['xAxis']['type'] = "category";
+            c['title'] = {text : 'average fund & benchmark weekly performances'};
+            c['subtitle'] = {text: 'conditional on S&P 500 returns'};
+            c['xAxis']['title'] = { text: 'weekly performances' };
+            c['chart']['type'] = 'column';
+            c['colors']= ['#434348','#7cb5ec','#90ed7d'];
+            c['tooltip']['headerFormat'] = '';
+            c['tooltip']['pointFormat'] = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.3f}%</b><br/>';
+            c['yAxis'] = {
+                    title: { text: '% return' },
+                    gridLineDashStyle: 'dot',
+                    lineWidth: 0,
+                    tickWidth: 0,
+                    gridLineColor: '#464646',
+                    lineColor: '#464646',
+                    labels: { format: '{value}%' }
+                };
+            var chart = $('#quantile').highcharts(c);
+        });
+
+
+    // country specific metrics
+    $.getJSON(inst+'/'+folio+'/graphCountryPortfolioMetrics', function(data) {
+        $.each(data, function () {
+            this.flag = this.code.replace('UK', 'GB').toLowerCase();
+        });
+        $('#country').highcharts('Map', {
+          title : {text : ''},
+          chart: { backgroundColor:null },
+          legend: { enabled: false},
+          mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+          },
+          tooltip: {
+            useHTML: true,
+            headerFormat: '',
+            pointFormat: '<span class="f32"><span class="flag {point.flag}" style="vertical-align: middle;"></span></span> {point.name} <br/>' +
+                ' Risk Contribution: <b>{point.value:.2f}</b>% <br/>' +
+                ' Dollar Value: $<b>{point.mktval:.2f}</b> <br/>' +
+                ' Portfolio Weight: <b>{point.mktw:.2f}</b>%',
+          },
+          colorAxis: {
+            min: 0,
+            max: 1,
+            minColor: '#FFFFFF',
+            maxColor: '#e65245'
+          },
+          series : [{
+            data :  data,
+            mapData: Highcharts.maps['custom/world'],
+            joinBy: ['iso-a2', 'code'],
+            name: 'risk contribution',
+            nullColor: "#DEDEDE",
+            states: {
+                hover: {
+                    color: '#BADA55'
+                }
+            }
+          }]
+        });
+    });
+
+    // get mutual fund returns
+    $.getJSON('/graphMutualFundPerformances', function(data) {
+            var c = JSON.parse(JSON.stringify(Chart));
+            c['xAxis']['tickWidth'] = 0;
+            c['xAxis']['lineWidth'] = 0;
+            c['data'] = null,
+            c['plotOptions']['columnrange'] = { grouping: false };
+            c['title'] = {text : 'performance category versus all mutual funds'};
+            c['xAxis']['title'] = { text: 'periods' };
+            c['chart']['type'] = 'columnrange';
+            c['chart']['inverted'] = false;
+            c['colors'] = ['#B43E1C','#D65D3A','#7BC034', '#438005'];
+            c['tooltip']['headerFormat'] = '';
+            c['tooltip']['shared'] = true;
+            c['tooltip']['pointFormat'] = '<span style="color:{series.color}">{series.name}</span>: <b>{point.y:,.2f}%</b><br/>';
+            c['xAxis']['categories'] = ['M', '3M', '6M', 'YTD', 'Y', '2Y'];
+            c['yAxis'] = {
+                    title: { text: '% return' },
+                    gridLineDashStyle: 'dot',
+                    lineWidth: 0,
+                    tickWidth: 0,
+                    gridLineColor: '#464646',
+                    lineColor: '#464646',
+                    labels: { format: '{value}%' }
+                };
+            c['series'] = data;
+            $.getJSON(inst+'/'+folio+'/graphPortfolioPeriodicReturns', function(dots) {
+              var arr = [dots['M'], dots['3M'], dots['6M'], dots['YTD'], dots['Y'], dots['2Y']];
+              c['series'].push({
+                name: 'fund',
+                type: 'scatter',
+                data: arr,
+                color: '#434348',
+                marker: {
+                    symbol: 'triangle',
+                    radius: 6
+                }
+              });
+            });
+            $('#releval').highcharts(c);
+        });
+
+    // graph fama french attributes
+    $.getJSON(inst+'/'+folio+'/graphFamaFrenchAttribution', function(data) {
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['xAxis']['tickWidth'] = 0;
+        c['xAxis']['lineWidth'] = 0;
+        c['data'] = null,
+        c['title'] = {text : ''};
+        c['chart']['polar'] = true;
+        c['tooltip']['headerFormat'] = '';
+        c['tooltip']['pointFormat'] = '<span style="color:{point.color}">\u25CF</span> <b><span style="color:{series.color}">{series.name}</span></b><br/>' +
+              'correlation: <b>{point.y:,.0f}%</b><br/> beta</span>: <b>{point.coef:,.2f}</b><br/><br/>';
+        c['xAxis']['categories'] = ['Conservative Investments', 'High Value', 'Overall Market', 'Robust Profitability', 'Small Cap', 'Momentum'];
+        c['xAxis']['tickmarkPlacement'] = 'on';
+        c['yAxis']['gridLineInterpolation'] = 'polygon';
+        c['yAxis']['labels'] =  { format: '{value}%' };
+        c['xAxis']['gridLineColor'] = '#464646';
+        c['xAxis']['gridLineDashStyle'] = 'dot';
+        c['series'] = [data['series_fund'], data['series_benchmark']];
+
+        $('#factor').highcharts(c);
+
+        // set alphas
+        $('#fundalpha').text( (Math.round(data['alpha']['coef'] * 100) / 100)+'%')
+        $('#benchmarkalpha').text( (Math.round(data['alpha']['coef_b'] * 100) / 100)+'%')
+    });
+
+    // get default mutual fund proportions
+    var saved_pie_chart = JSON.parse(JSON.stringify(Chart));
+    var saved_pie_data;
+    $.getJSON('/m/graphMutualFundProportions', function(data){
+        var c = JSON.parse(JSON.stringify(Chart));
+        c['data'] = null;
+        c['chart']['type'] = 'pie';
+        c['tooltip']['pointFormat'] = '{series.name}: <b>{point.percentage:.2f}%</b>';
+        c['title'] = {text : 'poor performers (m)'};
+        c['plotOptions']['pie'] = {
+              allowPointSelect: true,
+              cursor: 'pointer',
+              dataLabels: {
+                  distance: 5,
+                  maxStaggerLines:1,
+                  enabled: true,
+                  format: '<b>{point.name}</b>: {point.percentage:.0f} %',
+                  style: {
+                      width: '85px'
+                  }
+              }
+          };
+        c['series'] = [
+          {
+            name: 'poor performers',
+            data: data['poor'],
+            type: 'pie'
+          }
+        ];
+        saved_pie_chart = c;
+        saved_pie_data = data;
+
+        $('#prop').highcharts(c);
+     });
+
+
+    //setup all onclick events
+    // detailed rolling metrics
+    $('#dm a').click(function(e){
+      e.preventDefault();
+      $('#dm a#'+e['target']['id']).append(' <i class="fa fa-spinner fa-spin"></i>');
+      setTimeout(function(){
+        $.get(inst+'/'+folio+'/graphRollingStatistics/'+e['target']['id'], function(csv){
+          $('#rolling').highcharts().destroy();
+          var c = JSON.parse(JSON.stringify(Chart));
+          c['data']['csv'] = csv;
+          c['title'] = {text : 'rolling '+e['target']['innerText']};
+          c['tooltip']['pointFormat'] = '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y:,.2f}</b><br/>';
+          c['yAxis']['labels'] = { format: '{value}' };
+          $('#rolling').highcharts(c);
+          $('#dm a .fa-spin').remove();
+        });
+      }, 200);
+    });
+    // prop T
+    $('#prop_t').change(function(e){
+      e.preventDefault();
+
+      // destroy and replace with a loading
+      $('#prop').highcharts().destroy();
+      $('#prop').html('<i class="fa fa-spinner fa-spin" style="font-size:100px"></i>');
+
+      setTimeout(function(){
+        $.getJSON(e['target']['value']+'/graphMutualFundProportions', function(data){
+          saved_pie_chart['series'] = [
+            {
+              name: $('#prop_p').val() + ' performers',
+              data: data[$('#prop_p').val()],
+              type: 'pie'
+            }
+          ];
+          saved_pie_chart['title'] = {text : $('#prop_p').val() + ' performers ('+ e['target']['value']+')'};
+          $('#prop').highcharts(saved_pie_chart);
+          saved_pie_data = data;
+        });
+      }, 200);
+
+    });
+    // prop P
+    $('#prop_p').change(function(e){
+      e.preventDefault();
+
+      // destroy and replace with a loading
+      $('#prop').highcharts().destroy();
+      $('#prop').html('<i class="fa fa-spinner fa-spin" style="font-size:100px"></i>');
+
+      setTimeout(function(){
+          saved_pie_chart['series'] = [
+            {
+              name: $('#prop_p').val() + ' performers',
+              data: saved_pie_data[$('#prop_p').val()],
+              type: 'pie'
+            }
+          ];
+          saved_pie_chart['title'] = {text : $('#prop_p').val() + ' performers ('+ $('#prop_t').val() +')'};
+          $('#prop').highcharts(saved_pie_chart);
+      }, 200);
+
+    });
+
+    // show all
+    $('#dashboard').fadeIn("slow", function(){});
+    $('#loading').addClass('hidden');
+
+    //reflow to container
+    $('#performance').highcharts().reflow();
+    $('#rolling').height($('#dm').height());
+    $('#rolling').highcharts().reflow();
+    $('#quantile').height($('#crisisbreakdown').parent().height());
+    $('#quantile').highcharts().reflow();
+    $('#allocation').height($('#holdings').parent().height());
+    $('#allocation').highcharts().reflow();
+    $('#crisissubprime').highcharts().reflow();
+    $('#crisisaug').highcharts().reflow();
+    $('#crisiseuro').highcharts().reflow();
+    $('#crisis2015').highcharts().reflow();
+    $('#crisisbrexit').highcharts().reflow();
+    $('#country').height($('#factor').parent().height());
+    $('#country').highcharts().reflow();
+    $('#releval').highcharts().reflow();
+    $('#prop').highcharts().reflow();
+    $('#factor').highcharts().reflow();
+
+    $("[name='inst']").val(inst);
+    }, 600);
+  });
+</script>
+{% endblock %}

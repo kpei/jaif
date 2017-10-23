@@ -1,0 +1,33 @@
+value,label,series,ticker,mer
+F0CAN05MYF,TD Canadian Bond Index Fund,e,TDB909,0.5
+F0CAN05NJO,TD Canadian Index Fund,e,TDB900,0.33
+F0CAN05MYB,TD International Index Fund,e,TDB911,0.51
+0P000071W8,TD U.S. Index Fund (US$),e,TDB952,0.35
+0P000071HA,TD Global Bond Fund,I,TDB640,1.81
+0P000070GR,TD Precious Metals Fund ,I,TDB648,2.26
+F0CAN05MF4,TD High Yield Bond Fund,I,TDB626,1.77
+0P000070LK,TD Balanced Growth Fund,I,TDB970,2.22
+F0CAN05MS0,Scotia Canadian Bond Index Fund,I,BNS386,0.85
+F0CAN05M16,Scotia Canadian Index Fund,I,BNS381,1
+F0CAN05M17,Scotia US Index Fund,I,BNS382,1.08
+F0CAN05MRZ,Scotia International Index Fund,I,BNS387,1.26
+F0CAN05LYE,Scotia Global Bond Fund,I,BNS379,2.01
+F0CAN05MZ0,Scotia Mortgage Income Fund,I,BNS361,1.86
+F0CAN05NSU,Scotia Selected Growth Portfolio,A,BNS342,2.47
+F0CAN05NCN,RBC Canadian Government Bond Index Fund,I,RBF563,0.67
+F0CAN05MVZ,RBC Global Bond Fund,A,RBF267,1.78
+F0CAN05P92,RBC Canadian Index Fund,A,RBF556,0.72
+F0CAN05LYG,RBC US Index Fund,A,RBF557,0.72
+F0CAN05OYJ,RBC International Index (Currency Hedged),A,RBF559,0.71
+F0CAN05NGC,RBC Global Precious Metals,A,RBF468,2.13
+F0CAN05LUC,RBC Select Growth Portfolio,A,RBF459,2.04
+0P0000704P,CIBC US Index Fund,I,CIB500,1.18
+0P000070TE,CIBC Canadian Bond Index Fund,I,CIB503,1.16
+0P000073I7,CIBC Global Bond Index Fund,I,CIB511,1.19
+0P0000704N,CIBC Canadian Index Fund,I,CIB300,1.14
+0P0000707T,CIBC European Index Fund,I,CIB513,1.23
+0P000071B6,CIBC Emerging Markets Index Fund,I,CIB519,1.39
+0P000071GP,CIBC Asia Pacific Index Fund,I,CIB518,1.24
+0P0000704T,CIBC Precious Metals Fund,I,CIB497,2.58
+0P000070TG,CIBC Canadian Real Estate Fund,I,CIB506,2.87
+F0CAN05OEZ,CIBC Managed Growth Portfolio,A,CIB839,2.46

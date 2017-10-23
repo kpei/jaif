@@ -1,0 +1,191 @@
+{% extends "layout.html" %}
+{% block body %}
+<div class="jumbotron">
+    <h1><i class="fa fa-area-chart" aria-hidden="true"></i> investing for anyone</h1>
+    <p>a collection of open-ended and transparent global investment portfolios supported by data-driven analytics for the everyday canadian investor.  implementation starts right at your favorite financial institutions</p>
+    <div class="row">
+        <div class="col-md-1">
+            <a data-toggle="tooltip" data-placement="left" title="TD Canada Trust">
+                <img width="40" height="35" src="{{ url_for('static', filename='td-logo.png') }}"/>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a data-toggle="tooltip" data-placement="left" title="Royal Bank of Canada">
+                <img width="27" height="35" src="{{ url_for('static', filename='rbc-logo.png') }}"/>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a data-toggle="tooltip" data-placement="left" title="Scotiabank">
+                <img width="35" height="35" src="{{ url_for('static', filename='scotia-logo.png') }}"/>
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a data-toggle="tooltip" data-placement="left" title="CIBC">
+                <img width="38" height="35" src="{{ url_for('static', filename='cibc-logo.png') }}"/>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="push-sm">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="push"> </div>
+            <h1><i class="fa fa-pie-chart" aria-hidden="true"></i> strategic allocation<sup>*</sup></h1>
+            <p class="header-text">
+                emphasis on reactive allocation schemas and strategy tilts built from a quantitative and factor-based framework.
+            </p>
+        </div>
+        <div class="col-md-5 col-md-offset-1">
+                <div class="smgraph" id="tsallocation"> </div>
+        </div>
+    </div>
+    <div class="row push-sm">
+        <div class="col-md-6">
+            <div class="push"> </div>
+            <h1><i class="fa fa-rocket" aria-hidden="true"></i> outperforming the herd</h1>
+            <p class="header-text">
+                global strategies that go beyond the traditional stock-bond allocation through diversification, safety and low fees.
+            </p>
+        </div>
+        <div class="col-md-5 col-md-offset-1">
+                <div class="smgraph" id="tsperformance"> </div>
+        </div>
+    </div>
+    <div class="row push-sm">
+        <div class="col-md-6">
+            <div style="margin-top: 55px"> </div>
+            <h1><i class="fa fa-calculator" aria-hidden="true"></i> comprehensive statistics</h1>
+            <p class="header-text">
+                insightful metrics and analytics for investors to pick and choose their plan of attack.
+            </p>
+        </div>
+        <div class="col-md-4 col-md-offset-2">
+            <div class="smgraph">
+                <div class="btn btn-lg btn-labeled btn-success">
+                    <span class="btn-label">return</span>
+                    <span id="iret"><i class="fa-li fa fa-spinner fa-spin"></i></span>%
+                </div>
+                <div class="btn btn-lg btn-labeled btn-success">
+                    <span class="btn-label">alpha</span>
+                    <span id="ialpha"><i class="fa-li fa fa-spinner fa-spin"></i></span>%
+                </div><br/>
+                <div class="btn btn-lg btn-labeled btn-success">
+                    <span class="btn-label">beta</span>
+                    <span id="ibeta"><i class="fa-li fa fa-spinner fa-spin"></i></span>
+                </div><br/>
+                <div class="btn btn-lg btn-labeled btn-success">
+                    <span class="btn-label">sharpe</span>
+                    <span id="isharpe"><i class="fa-li fa fa-spinner fa-spin"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <a href="#" class="btn btn-lg btn-primary">
+          <i class="fa fa-briefcase" aria-hidden="true"></i>
+          view active portfolios now
+        </a>
+      </div>
+      <div class="col-md-6 footnote text-right">
+        * historical performance based on a risk-targeted equal weight portfolio
+      </div>
+    </div>
+</div>
+{% endblock %}
+{% block end_scripts %}
+<script>
+$.get('td/8vt/graphAllocationSeries/dol/1', function(csv) {
+    $('#tsallocation').highcharts({
+        chart: {
+            type: 'area',
+            backgroundColor:null
+        },
+        title : {text : 'Allocation over each quarter'},
+        plotOptions: {
+            area: {
+                stacking: 'percent',
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        data: {
+            csv: csv,
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.percentage:.1f}%</b><br/>',
+            shared: true
+        },
+        yAxis: {
+            title: { text: '' },
+            gridLineDashStyle: 'dot',
+            min: 0,
+            max: 100,
+            lineWidth: 0,
+            tickWidth: 0,
+            labels: { format: '{value}%' }
+        },
+        xAxis: {
+            title: { text: '' },
+            lineWidth: 0,
+            tickWidth: 0
+        }
+    });
+});
+
+$.get('td/8vt/graphPerformanceSeries/1', function(csv) {
+    $('#tsperformance').highcharts({
+        chart: {
+            type: 'line',
+            backgroundColor:null
+        },
+        title : {text : 'Growth over each quarter'},
+        plotOptions: {
+            line: {
+                marker: {
+                    enabled: false
+                }
+            }
+        },
+        data: {
+            csv: csv,
+        },
+        legend: {
+            enabled: false
+        },
+        tooltip: {
+            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>${point.y:,.2f}</b><br/>',
+            shared: true
+        },
+        yAxis: {
+            title: { text: '' },
+            gridLineDashStyle: 'dot',
+            gridLineColor: '#464646',
+            lineColor: '#464646',
+            tickWidth: 0,
+            labels: { format: '${value}' }
+        },
+        xAxis: {
+            title: { text: '' },
+            lineColor: '#464646',
+            tickWidth: 0
+        }
+    });
+});
+
+$.getJSON( "td/8vt/getFolioStat", function( data ) {
+  $('#iret').text( Math.round(data['return'] * 10000) / 100 );
+  $('#ialpha').text( Math.round(data['alpha'] * 10000) / 100 );
+  $('#ibeta').text( Math.round(data['beta'] * 100) / 100 );
+  $('#isharpe').text( Math.round(data['sharpe'] * 100) / 100 );
+});
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+</script>
+{% endblock %}
